@@ -1,0 +1,58 @@
+{
+  "name": "minimal dev-container",
+  "image": "ghcr.io/emblincram/devcon-mini:latest",
+  "workspaceFolder": "/home/yocto",
+  "remoteUser": "yocto",
+  "containerEnv": {
+    "YOCTO_SSTATE_DIR": "${localEnv:YOCTO_SSTATE_DIR}",
+    "YOCTO_DL_DIR":     "${localEnv:YOCTO_DL_DIR}",
+    "CR_PAT":           "${localEnv:CR_PAT}"
+  },
+  "extensions": [
+    "ms-vscode.cpptools",
+    "eamodio.gitlens",
+    "ms-python.python"
+  ],
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "search.exclude": {
+          "**/node_modules": true,
+          "**/.git": true,
+          "**/build": true,
+          "**/dist": true,
+          "**/__pycache__": true
+        },
+        "search.quickOpen.includeSymbols": false,
+        "search.followSymlinks": false,
+        "files.watcherExclude": {
+          "**/.git/objects/**": true,
+          "**/.git/subtree-cache/**": true,
+          "**/node_modules/**": true,
+          "**/build/**": true,
+          "**/dist/**": true,
+          "**/__pycache__/**": true
+        },
+        "python.analysis.indexing": false,
+        "python.analysis.memory.keepLibraryAst": false,
+        "python.languageServer": "Jedi",
+        "editor.formatOnSave": false,
+        "files.autoSave": "afterDelay",
+        "terminal.integrated.rendererType": "dom",
+        "window.titleBarStyle": "native"
+      }
+    }
+  },
+  "initializeCommand": "${localWorkspaceFolder}/toolbox/initialize-command.sh ${localWorkspaceFolder}",
+  "mounts": [
+    "source=${localWorkspaceFolder}/toolbox,target=/home/yocto/toolbox,type=bind",
+    "source=${localWorkspaceFolder}/build,target=/home/yocto/build,type=bind",
+    "source=${localWorkspaceFolder}/../../downloads,target=/home/yocto/downloads,type=bind",
+    "source=${localWorkspaceFolder}/../../sstate-cache,target=/home/yocto/sstate-cache,type=bind"
+  ],
+  "postCreateCommand": "/home/yocto/toolbox/post-create-command.sh /home/yocto",
+  "shutdownAction": "stopContainer"
+}
